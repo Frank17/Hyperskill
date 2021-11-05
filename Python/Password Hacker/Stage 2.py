@@ -10,7 +10,7 @@ with socket.socket() as s:
     s.connect((hostname, int(port)))
 
     # 2: construct a string of all possible characters in passwords
-    chars = string.ascii_letters + string.digits
+    chars = string.ascii_lowercase + string.digits
 
     for i in range(1, len(chars)+1):
         # 3: create combinations of characters
