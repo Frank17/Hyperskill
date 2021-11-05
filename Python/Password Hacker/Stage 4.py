@@ -19,7 +19,6 @@ def find_login(lg_list):
 
 def find_password(lg):
     chars, pwd = string.ascii_letters + string.digits, ''
-
     while 1:
         for c in chars:
             s.send(lg_pwd(lg, pwd+c).encode())
