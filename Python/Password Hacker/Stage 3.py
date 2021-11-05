@@ -18,9 +18,9 @@ with socket.socket() as s, open("password.txt") as pwd_file:
                 *zip(pwd.lower(), pwd.upper())
         ))
 
-        for pwd in pwds:
-            s.send(pwd.encode())
+        for p in pwds:
+            s.send(p.encode())
 
             if s.recv(1024) == b'Connection success!':
-                print(pwd)
+                print(p)
                 exit()
