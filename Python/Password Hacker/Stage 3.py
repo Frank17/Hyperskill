@@ -2,8 +2,9 @@ import socket
 import sys
 import itertools as it
 
-# before running the program, download the file used here from https://stepik.org/media/attachments/lesson/255258/passwords.txt
-# and save it as |passwords.txt|. Otherwise, the program would not be able to read off the file.
+# before running the program, download the file used from here:
+#       https://stepik.org/media/attachments/lesson/255258/passwords.txt
+# then save it as passwords.txt and upload it to the same directory of execution
 
 with socket.socket() as s, open("password.txt") as pwd_file:
     
