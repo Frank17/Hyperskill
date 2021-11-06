@@ -59,7 +59,7 @@ class PasswordHacker:
 
             for lg in lg_list:
                 self.s.send(self.lg_pwd(lg, '').encode())
-
+                
                 r = json.loads(self.s.recv(1024).decode())['result']
                 
                 if r != 'Wrong login!':
@@ -70,7 +70,6 @@ class PasswordHacker:
                 for c in chars:
                     self.s.send(self.lg_pwd(cracked_lg,
                                             cracked_pwd+c).encode())
-
                     r = json.loads(self.s.recv(1024).decode())['result']
 
                     if timing:
