@@ -41,6 +41,7 @@ class PasswordHacker:
             for pwd in pwd_list:
                 all_pwds = (''.join(p) for p in it.product(
                                                 *zip(pwd.lower(), pwd.upper())))
+                
                 for sg_pwd in all_pwds:
                     self.s.send(sg_pwd.encode())
 
