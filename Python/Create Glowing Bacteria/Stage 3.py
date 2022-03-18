@@ -10,7 +10,7 @@ class Strand:
         return ''.join(self.bases[e] for e in self.strand)
 
     def _insert(self, strand, pos):
-        return strand[:pos] + ' ' + strand[pos:]
+        return f'{strand[:pos]} {strand[pos:]}'
 
     def cut(self, site):
         comp_strand = self.get_complementary()

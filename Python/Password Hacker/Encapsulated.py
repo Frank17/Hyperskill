@@ -22,7 +22,7 @@ class PasswordHacker:
 
         
     def pwd_char_cracker(self, chars=None, success_message='Connection success!'):
-        chars = chars if chars else self.pwd_chars
+        chars = chars or self.pwd_chars
 
         for i in range(1, len(chars)+1):
             cbs = (''.join(i) for i in it.product(chars, repeat=i))
@@ -56,20 +56,20 @@ class PasswordHacker:
                                                                 wrong_message='Wrong login!',
                                                                 exception_message='Exception happened during login',
                                                                 success_message='Connection success!'):
-        chars, cracked_lg, cracked_pwd = chars if chars else lg_chars, '', ''
+        chars, cracked_lg, cracked_pwd = chars or lg_chars, '', ''
 
         with open(lg_file) as f:
             lg_list = f.read().split('\n')
 
             for lg in lg_list:
                 self.s.send(self.lg_pwd(lg, '').encode())
-                
+
                 r = json.loads(self.s.recv(1024).decode())['result']
-                
+
                 if r != wrong_message:
                     cracked_lg = lg
                     break
-            
+
             while 1:
                 for c in chars:
                     self.s.send(self.lg_pwd(cracked_lg,
@@ -81,13 +81,12 @@ class PasswordHacker:
                         action = self.s.recv(1024)
                         if time.perf_counter() - start >= 0.1:
                             cracked_pwd += c
-                    else:
-                        if r == exception_message:
-                            cracked_pwd += c
+                    elif r == exception_message:
+                        cracked_pwd += c
 
                     if r == success_message:
                         break
-        
+
         return self.lg_pwd(cracked_lg, cracked_pwd)
 
 
