@@ -36,7 +36,7 @@ def find_password(lg):
             if r == 'Connection success!':
                 return pwd+c
 
-with socket.socket() as s, open("/Users/frankzhang/Library/Mobile Documents/com~apple~CloudDocs/Downloads/logins.txt") as lg_file:
+with socket.socket() as s, open("logins.txt") as lg_file:
     hostname, port = sys.argv[1:]
     s.connect((hostname, int(port)))
 
